@@ -1,0 +1,1 @@
+# Host a Static website using aws and s3
