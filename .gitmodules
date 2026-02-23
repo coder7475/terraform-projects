@@ -1,0 +1,3 @@
+[submodule "react_aws_pipeline"]
+	path = react_aws_pipeline
+	url = https://github.com/coder7475/react-aws-pipeline
