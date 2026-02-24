@@ -5,7 +5,8 @@ variable "aws_region" {
 
 variable "bucket_name" {
   type = string
-  default = "tf-state"
+  description = "Name for the Terraform state S3 bucket"
+  default = "tf-state-bootstrap"
 }
 
 variable "env" {
