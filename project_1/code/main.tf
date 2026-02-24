@@ -1,6 +1,10 @@
+resource "random_id" "random_suffix" {
+  byte_length = 4
+}
+
 // Define the AWS S3 bucket resource
 resource "aws_s3_bucket" "firstbucket" {
-  bucket = var.bucket_name
+  bucket = "${var.bucket_name}-${random_id.random_suffix.hex}"
 
     tags = {
       Name        = var.bucket_name
@@ -72,7 +76,7 @@ resource "aws_s3_bucket_policy" "first_bucket_policy" {
         Resource = "${aws_s3_bucket.firstbucket.arn}/*"
         Condition = {
           StringEquals = {
-            "AWS:SourceArn" = "arn:aws:cloudfront::${data.aws_caller_identity.current.account_id}:distribution/*"
+            "AWS:SourceArn" = aws_cloudfront_distribution.s3_distribution.arn
           }
         }
       }
@@ -82,7 +86,7 @@ resource "aws_s3_bucket_policy" "first_bucket_policy" {
 
 //
 resource "aws_s3_object" "object" {
-  for_each = fileset("${path.module}/www", ["*.**"])
+  for_each = fileset("${path.module}/www", "*.**")
   bucket = aws_s3_bucket.firstbucket.id
   key    = each.value
   source = "${path.module}/www/${each.value}"
@@ -105,3 +109,51 @@ resource "aws_s3_object" "object" {
 }
 
 // create cloudfront distribution to serve the content from the S3 bucket
+resource "aws_cloudfront_distribution" "s3_distribution" {
+  origin {
+    domain_name              = aws_s3_bucket.firstbucket.bucket_domain_name
+    origin_access_control_id = aws_cloudfront_origin_access_control.oac.id
+    origin_id                = local.s3_origin_id
+  }
+
+  enabled             = true
+  is_ipv6_enabled     = true
+  comment             = "Some comment"
+  default_root_object = "index.html"
+
+  default_cache_behavior {
+    allowed_methods  = [ "GET", "HEAD"]
+    cached_methods   = ["GET", "HEAD"]
+    target_origin_id = local.s3_origin_id
+
+    forwarded_values {
+      query_string = false
+
+      cookies {
+        forward = "none"
+      }
+    }
+
+    viewer_protocol_policy = "redirect-to-https"
+    min_ttl                = 0
+    default_ttl            = 3600
+    max_ttl                = 86400
+  }
+
+  price_class = "PriceClass_100"
+
+  restrictions {
+    geo_restriction {
+      restriction_type = "none"
+    }
+  }
+
+  tags = {
+    Environment = var.env
+    Name        = "firstbucket-distribution"
+  }
+
+  viewer_certificate {
+    cloudfront_default_certificate = true
+  }
+}
