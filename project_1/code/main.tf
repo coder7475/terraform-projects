@@ -23,14 +23,6 @@ resource "aws_s3_bucket_public_access_block" "public_access_block" {
 }
 
 
-//  Enable versioning on the S3 bucket
-resource "aws_s3_bucket_versioning" "versioning" {
-  bucket = aws_s3_bucket.firstbucket.id
-  versioning_configuration {
-    status = "Enabled"
-  }
-}
-
 // Enable server-side encryption on the S3 bucket
 resource "aws_s3_bucket_server_side_encryption_configuration" "encryption" {
   bucket = aws_s3_bucket.firstbucket.id
@@ -140,7 +132,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     max_ttl                = 86400
   }
 
-  price_class = "PriceClass_100"
+  price_class = "PriceClass_200"
 
   restrictions {
     geo_restriction {
