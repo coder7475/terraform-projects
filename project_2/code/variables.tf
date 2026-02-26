@@ -6,7 +6,7 @@ variable "primary_region" {
 
 variable "secondary_region" {
   type = string
-  default = "ap-south-2"
+  default = "ap-northeast-1"
 }
 
 variable "bucket_name" {
@@ -17,4 +17,13 @@ variable "bucket_name" {
 variable "env" {
   type = string
   default = "development"
+}
+
+variable "primary_vpc_cidr" {
+  default = "10.0.0.0/16"
+}
+
+
+variable "secondary_vpc_cidr" {
+  default = "10.1.0.0/16"
 }
