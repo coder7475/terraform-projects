@@ -13,8 +13,3 @@ output "primary_instance_public_ip" {
 output "secondary_instance_public_ip" {
   value = aws_instance.secondary_instance.public_ip
 }
-
-output "vpc_peering_status" {
-  value = aws_vpc_peering_connection.primary_to_secondary.status
-}
-
