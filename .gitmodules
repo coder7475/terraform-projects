@@ -4,3 +4,6 @@
 [submodule "project_2/code/terragrunt"]
 	path = project_2/code/terragrunt
 	url = https://github.com/coder7475/terragrunt
+[submodule "terragrunt"]
+	path = terragrunt
+	url = https://github.com/coder7475/terragrunt
