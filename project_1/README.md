@@ -18,15 +18,19 @@ Internet → CloudFront Distribution → S3 Bucket (Static Website)
 ## 📁 Project Structure
 
 ```
-code/
-├── main.tf              # Main Terraform configuration
-├── variables.tf         # Input variables
-├── outputs.tf          # Output values
-├── README.md           # This file
-└── www/                # Website source files
-    ├── index.html      # Main HTML page
-    ├── style.css       # Stylesheet
-    └── script.js       # JavaScript functionality
+project_1/
+├── README.md                   # This file
+└── code/                       # Terraform configuration
+    ├── main.tf                 # Main Terraform configuration
+    ├── variables.tf            # Input variables
+    ├── outputs.tf              # Output values
+    ├── provider.tf             # AWS provider configuration
+    ├── backend.tf              # Backend configuration
+    ├── local.tf                # Local values
+    └── www/                    # Website source files
+        ├── index.html          # Main HTML page
+        ├── styles.css          # Stylesheet
+        └── script.js           # JavaScript functionality
 ```
 
 ## 🚀 Features
@@ -55,9 +59,13 @@ code/
 
 ## 📋 Deployment Steps
 
-### 1. Initialize Terraform
+### 1. Navigate to Project Directory
 ```bash
-cd lessons/day14
+cd project_1/code
+```
+
+### 2. Initialize Terraform
+```bash
 terraform init
 ```
 
@@ -82,10 +90,10 @@ website_url = "https://d123xyz.cloudfront.net"
 
 | Resource Type | Purpose | Count |
 |---------------|---------|-------|
-| S3 Bucket | Website hosting | 1 |
-| S3 Bucket Policy | Public read access | 1 |
-| S3 Objects | Website files (HTML, CSS, JS) | 3 |
-| CloudFront Distribution | Global CDN | 1 |
+| AWS S3 Bucket | Website hosting | 1 |
+| AWS S3 Bucket Policy | Public read access | 1 |
+| AWS S3 Object | Website files (HTML, CSS, JS) | 3 |
+| AWS CloudFront Distribution | Global CDN | 1 |
 
 ## 🔧 Configuration Details
 

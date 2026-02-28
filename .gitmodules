@@ -1,3 +1,6 @@
 [submodule "react_aws_pipeline"]
 	path = react_aws_pipeline
 	url = https://github.com/coder7475/react-aws-pipeline
+[submodule "project_2/code/terragrunt"]
+	path = project_2/code/terragrunt
+	url = https://github.com/coder7475/terragrunt

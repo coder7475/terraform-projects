@@ -1,10 +1,10 @@
 # VPC and Peering (Mini Project 2)
 
-## Overview
+## 🎯 Overview
 
 This demo showcases **AWS VPC Peering** by creating two VPCs in different AWS regions and establishing a peering connection between them. This allows resources in both VPCs to communicate with each other using private IP addresses.
 
-## Architecture
+## 🏗️ Architecture
 ```
 ┌─────────────────────────────────────┐       ┌─────────────────────────────────────┐
 │     Primary VPC (us-east-1)         │       │    Secondary VPC (us-west-2)        │
@@ -24,41 +24,26 @@ This demo showcases **AWS VPC Peering** by creating two VPCs in different AWS re
                   └───────────────VPC Peering──────────────────┘
 ```
 
-## What This Demo Creates
+## 📦 Resources Created
 
 ### Networking Components
-1. **Two VPCs**:
-   - Primary VPC in us-east-1 (10.0.0.0/16)
-   - Secondary VPC in us-west-2 (10.1.0.0/16)
-
-2. **Subnets**:
-   - One public subnet in each VPC
-   - Configured with auto-assign public IP
-
-3. **Internet Gateways**:
-   - One for each VPC to allow internet access
-
-4. **Route Tables**:
-   - Custom route tables with routes to internet and peered VPC
-   - Routes for VPC peering traffic
-
-5. **VPC Peering Connection**:
-   - Cross-region peering between the two VPCs
-   - Automatic acceptance configured
+| Resource Type | Purpose | Region |
+|---------------|---------|--------|
+| AWS VPC | Primary VPC (10.0.0.0/16) | us-east-1 |
+| AWS VPC | Secondary VPC (10.1.0.0/16) | us-west-2 |
+| AWS Subnet | Public subnet in each VPC | Both |
+| AWS Internet Gateway | Internet access for each VPC | Both |
+| AWS Route Table | Routing with peering routes | Both |
+| AWS VPC Peering Connection | Cross-region peering | Both |
 
 ### Compute Resources
-1. **EC2 Instances**:
-   - One t2.micro instance in each VPC
-   - Running Amazon Linux 2
-   - Apache web server installed
-   - Custom web page showing VPC information
+| Resource Type | Purpose | Region |
+|---------------|---------|--------|
+| AWS Instance | EC2 t2.micro with Apache | us-east-1 |
+| AWS Instance | EC2 t2.micro with Apache | us-west-2 |
+| AWS Security Group | Firewall rules | Both |
 
-2. **Security Groups**:
-   - SSH access from anywhere (port 22)
-   - ICMP (ping) allowed from peered VPC
-   - All TCP traffic allowed between VPCs
-
-## Prerequisites
+## 🛠️ Prerequisites
 
 1. **AWS Account** with appropriate permissions
 2. **AWS CLI** configured with credentials
@@ -77,19 +62,14 @@ aws ec2 create-key-pair --key-name vpc-peering-demo --region us-west-2 --query '
 chmod 400 vpc-peering-demo.pem
 ```
 
-## Setup Instructions
+## 🚀 Setup Instructions
 
-### 1. Clone and Navigate
+### 1. Navigate to Project Directory
 ```bash
-cd lessons/day15
+cd project_2/code
 ```
 
 ### 2. Configure Variables
-Copy the example tfvars file and update it:
-```bash
-cp terraform.tfvars.example terraform.tfvars
-```
-
 Edit `terraform.tfvars` and add your key pair name:
 ```hcl
 key_name = "vpc-peering-demo"
@@ -112,7 +92,7 @@ terraform apply
 
 Type `yes` when prompted.
 
-## Testing VPC Peering
+## ✅ Testing VPC Peering
 
 After the infrastructure is created, you can test the VPC peering connection:
 
@@ -145,7 +125,7 @@ ping <PRIMARY_PRIVATE_IP>
 curl http://<PRIMARY_PRIVATE_IP>
 ```
 
-## Key Concepts Demonstrated
+## 📚 Key Concepts Demonstrated
 
 ### 1. VPC Peering
 - Cross-region VPC peering connection
@@ -167,7 +147,7 @@ curl http://<PRIMARY_PRIVATE_IP>
 - Cross-region resource dependencies
 - Regional AMI selection
 
-## Important Notes
+## ⚠️ Important Notes
 
 ### CIDR Blocks
 - VPC CIDR blocks **must not overlap** for peering to work
@@ -190,7 +170,7 @@ terraform destroy
 - VPC peering does not support **edge-to-edge routing**
 - Maximum of **125** peering connections per VPC
 
-## Troubleshooting
+## 🔧 Troubleshooting
 
 ### Cannot Connect Between Instances
 1. Check security groups allow traffic from the peered VPC CIDR
@@ -209,7 +189,7 @@ terraform destroy
 3. Ensure instance has a public IP address
 4. Verify internet gateway and route table configuration
 
-## Cleanup
+## 🧹 Cleanup
 
 To avoid ongoing charges, destroy all resources:
 ```bash
@@ -225,7 +205,7 @@ Type `yes` when prompted. This will remove:
 - Internet gateways
 - VPCs
 
-## Learning Outcomes
+## 🎉 Learning Outcomes
 
 After completing this demo, you will understand:
 1. How to create VPC peering connections between regions
@@ -234,13 +214,13 @@ After completing this demo, you will understand:
 4. How to use Terraform provider aliases for multi-region deployments
 5. How to test and verify VPC peering connectivity
 
-## Additional Resources
+## 🔗 Additional Resources
 
 - [AWS VPC Peering Documentation](https://docs.aws.amazon.com/vpc/latest/peering/)
 - [Terraform AWS Provider](https://registry.terraform.io/providers/hashicorp/aws/latest/docs)
 - [VPC Peering Best Practices](https://docs.aws.amazon.com/vpc/latest/peering/vpc-peering-basics.html)
 
-## Next Steps
+## 🚦 Next Steps
 
 To extend this demo, you could:
 1. Add more subnets (private subnets)
