@@ -12,7 +12,7 @@ resource "aws_vpc" "primary_vpc" {
 
 resource "aws_vpc" "secondary_vpc" {
   cidr_block       = var.secondary_vpc_cidr
-  provider = aws.primary
+  provider = aws.secondary
   enable_dns_hostnames=true
   enable_dns_support =true
   instance_tenancy = "default"
@@ -118,7 +118,7 @@ resource "aws_vpc_peering_connection" "primary_to_secondary" {
   provider = aws.primary
   vpc_id = aws_vpc.primary_vpc.id
   peer_vpc_id = aws_vpc.secondary_vpc.id
-  peer_region = var.secondary_region
+  peer_region = var.secondary_region  
   auto_accept = false
 
   tags = {
@@ -156,6 +156,7 @@ resource "aws_route" "secondary_to_primary_route" {
   route_table_id = aws_route_table.secondary_rt.id
   destination_cidr_block = var.primary_vpc_cidr
   vpc_peering_connection_id = aws_vpc_peering_connection.primary_to_secondary.id
-  depends_on = [ aws_vpc_peering_connection.primary_to_secondary]
+
+  depends_on = [ aws_vpc_peering_connection_accepter.secondary_accepts_primary ]
 }
 
