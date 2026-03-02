@@ -11,3 +11,18 @@ resource "aws_iam_user" "users" {
     JobTitle = each.value.job_title
   }
 }
+
+resource "aws_iam_user_login_profile" "users" {
+  for_each = aws_iam_user.users
+
+  user = each.value.name
+  password_length = 16
+  password_reset_required = true
+
+  lifecycle {
+    ignore_changes = [ 
+      password_length,
+      password_reset_required
+     ]
+  }
+}
