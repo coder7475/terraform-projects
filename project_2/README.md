@@ -214,7 +214,11 @@ After completing this demo, you will understand:
 4. How to use Terraform provider aliases for multi-region deployments
 5. How to test and verify VPC peering connectivity
 
-## 🔗 Additional Resources
+## 📖 System Design
+
+For a detailed technical explanation of the architecture and components, see the [System Design Document](/project_2/docs/DESIGN.md).
+
+## � Additional Resources
 
 - [AWS VPC Peering Documentation](https://docs.aws.amazon.com/vpc/latest/peering/)
 - [Terraform AWS Provider](https://registry.terraform.io/providers/hashicorp/aws/latest/docs)

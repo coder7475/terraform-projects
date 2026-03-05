@@ -128,7 +128,11 @@ After completing this project, you should understand:
 - ✅ Proper MIME type configuration for web assets
 - ✅ AWS CDN concepts and caching strategies
 
-## 🔗 Useful Links
+## 📖 System Design
+
+For a detailed technical explanation of the architecture and components, see the [System Design Document](/project_1/docs/DESIGN.md).
+
+## � Useful Links
 
 - [AWS S3 Static Website Hosting Guide](https://docs.aws.amazon.com/AmazonS3/latest/userguide/WebsiteHosting.html)
 - [CloudFront Documentation](https://docs.aws.amazon.com/cloudfront/)

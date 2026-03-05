@@ -40,6 +40,24 @@ terraform apply
 
 ---
 
+### [Project 3: IAM User Management](/project_3/)
+Manage AWS IAM users, groups, and memberships using Terraform with CSV data source.
+
+**Features:**
+- CSV-based user management
+- Dynamic group membership based on user attributes
+- Console access with password management
+- Tag-based organization (Department, JobTitle)
+
+**Quick Start:**
+```bash
+cd project_3/code
+terraform init
+terraform apply
+```
+
+---
+
 ### [React AWS Pipeline](/react_aws_pipeline/)
 CI/CD pipeline for deploying React applications to AWS.
 
@@ -68,6 +86,9 @@ Initial Terraform backend configuration.
 ## 📖 Documentation
 
 - [Dynamic State Bucket Documentation](/docs/dynamic_state_bucket.md)
+- [Project 1: Static Website - System Design](/project_1/docs/DESIGN.md)
+- [Project 2: VPC Peering - System Design](/project_2/docs/DESIGN.md)
+- [Project 3: IAM User Management - System Design](/project_3/docs/DESIGN.md)
 
 ## 🚀 Getting Started
 
