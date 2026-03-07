@@ -13,7 +13,7 @@ resource "aws_elastic_beanstalk_application_version" "v2" {
   application = aws_elastic_beanstalk_application.app.name
   description = "Application Version 2.0 - New Feature Release"
   bucket      = aws_s3_bucket.app_versions.id
-  key         = aws_s3_object.app_v2.id
+  key         = aws_s3_object.app_v2.key
 
   tags = var.tags
 }
