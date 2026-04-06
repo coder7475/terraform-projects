@@ -16,7 +16,7 @@ Deploy a static website on AWS using S3 and CloudFront.
 **Quick Start:**
 ```bash
 cd project_1/code
-terraform initV
+terraform init
 terraform apply
 ```
 
@@ -58,10 +58,55 @@ terraform apply
 
 ---
 
+### [Project 4: Blue-Green Deployment](/project_4/)
+
+Zero-downtime deployment strategy using AWS Elastic Beanstalk with blue-green environments.
+
+**Features:**
+
+- Elastic Beanstalk application with two environments
+- Blue environment (Production) - running v1.0
+- Green environment (Staging) - running v2.0
+- CNAME swap for instant traffic switching
+- Easy rollback capability
+
+**Quick Start:**
+
+```bash
+cd project_4/code
+./package-apps.sh  # Linux/Mac or use package-apps.ps1 for Windows
+terraform init
+terraform apply
+```
+
+---
+
+### [Project 5: Serverless Image Processing](/project_5/)
+
+Automated image processing pipeline using Lambda, S3, and Pillow library.
+
+**Features:**
+
+- S3 event-triggered Lambda function
+- Automated image optimization (JPEG, WebP, PNG)
+- Multiple output variants (compressed, low-quality, thumbnail)
+- Serverless architecture with automatic scaling
+- Lambda layer with Pillow library
+
+**Quick Start:**
+```bash
+cd project_5/code
+./scripts/deploy.sh
+```
+
+---
+
 ### [React AWS Pipeline](/react_aws_pipeline/)
+
 CI/CD pipeline for deploying React applications to AWS.
 
 **Features:**
+
 - CodePipeline for continuous delivery
 - S3 bucket for website hosting
 - CloudFront CDN distribution
@@ -70,6 +115,7 @@ CI/CD pipeline for deploying React applications to AWS.
 ---
 
 ### [Bootstrap](/bootstrap/)
+
 Initial Terraform backend configuration.
 
 **Purpose:**
@@ -89,6 +135,8 @@ Initial Terraform backend configuration.
 - [Project 1: Static Website - System Design](/project_1/docs/DESIGN.md)
 - [Project 2: VPC Peering - System Design](/project_2/docs/DESIGN.md)
 - [Project 3: IAM User Management - System Design](/project_3/docs/DESIGN.md)
+- [Project 4: Blue-Green Deployment - Architecture](/project_4/docs/ARCHITECTURE.md)
+- [Project 5: Serverless Image Processing - Architecture](/project_5/docs/IMAGE_PROCESSING_ARCHITECTURE.md)
 
 ## 🚀 Getting Started
 
