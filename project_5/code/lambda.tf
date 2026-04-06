@@ -68,6 +68,16 @@ resource "aws_iam_role_policy" "lambda_policy" {
   })
 }
 
+# LAMBDA LAYER (Pillow)
+# ============================================================================
+
+resource "aws_lambda_layer_version" "pillow_layer" {
+  filename            = "${path.module}/pillow_layer.zip"
+  layer_name          = "${var.project_name}-pillow-layer"
+  compatible_runtimes = ["python3.12"]
+  description         = "Pillow library for image processing"
+}
+
 # Create Lambda function for image processing
 # Package the Lambda function code as zip
 data "archive_file" "lambda_zip" {
@@ -88,6 +98,7 @@ resource "aws_lambda_function" "image_processor" {
   timeout = 60
   memory_size = 1024
 
+  layers = [aws_lambda_layer_version.pillow_layer.arn]
   environment {
     variables = {
       PROCESSED_BUCKET = aws_s3_bucket.processed_bucket.id
