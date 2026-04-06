@@ -117,6 +117,10 @@ aws cloudwatch get-metric-statistics \
 ## 🧹 Cleanup
 
 ```bash
+# Empty buckets
+./scripts/empty_bucket.sh upload_bucket_name
+./scripts/empty_bucket.sh processed_bucket_name
+
 # Destroy all resources
 ./scripts/destroy.sh
 ```
