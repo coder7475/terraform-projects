@@ -14,6 +14,8 @@ resource "aws_s3_bucket" "trail_logs_bucket" {
   force_destroy = true
 }
 
+data "aws_caller_identity" "current" {}
+
 resource "aws_s3_bucket_policy" "trail_logs_policy" {
   bucket = aws_s3_bucket.trail_logs_bucket.id
   policy = <<POLICY
@@ -48,7 +50,6 @@ resource "aws_s3_bucket_policy" "trail_logs_policy" {
 POLICY
 }
 
-data "aws_caller_identity" "current" {}
 
 # 3. CloudWatch Log Group
 resource "aws_cloudwatch_log_group" "s3_access_logs" {
