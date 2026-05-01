@@ -57,7 +57,7 @@ Screen recording of VS Code showing the folder structure and key files.
 > "Let's look at how this is organized. This is a **modular Terraform project** with four independent modules:
 >
 > - `modules/sns_security` - Creates the SNS topic and email subscription for alerts
-> - `modules/log_ingest_s3` - Sets up the S3 bucket, CloudTrail, and CloudWatch Log Group
+> - `modules/log_metrics` - Sets up the S3 buckets, CloudTrail, and CloudWatch Log Group
 > - `modules/security_metrics` - Defines the metric filters that scan logs for patterns
 > - `modules/security_alarms` - Creates the alarms that trigger when metrics spike
 >
@@ -84,9 +84,9 @@ Screen recording of VS Code showing the folder structure and key files.
 
 ---
 
-### Module 3: Log Ingest Module
+### Module 3: Log Metrics Module
 
-**Show:** Open `modules/log_ingest_s3/main.tf`
+**Show:** Open `modules/log_metrics/main.tf`
 
 **What to Say:**
 
@@ -111,16 +111,16 @@ Screen recording of VS Code showing the folder structure and key files.
 
 > "This is where we define _what to look for_ in the logs. We create two metric filters:
 >
-> **Filter 1: Denied Requests**
+> **Filter 1: DeniedRequests**
 >
-> - Pattern: `{ $.errorCode = \"AccessDenied\" || $.errorCode = \"403\" }`
+> - Pattern: `{ $.errorCode = "AccessDenied" || $.errorCode = "403" }`
 > - This matches any log entry where someone got a 403 or Access Denied error
 > - Each match increments a custom metric called `DeniedRequests` by 1
 > - Namespace: `Security/S3` (this is how we organize custom metrics)
 >
-> **Filter 2: Restricted Prefix**
+> **Filter 2: RestrictedPrefixAccess**
 >
-> - Pattern: `{ $.requestParameters.key = \"private/*\" }`
+> - Pattern: `{ $.requestParameters.key = "private/*" }`
 > - This matches any access to files under the `private/` folder
 > - Each match increments `RestrictedPrefixAccess` by 1
 >
@@ -146,7 +146,7 @@ Screen recording of VS Code showing the folder structure and key files.
 > - Statistic: Sum
 > - Meaning: If we see even 1 denied request in a minute, trigger the alarm
 >
-> **Alarm 2: RestrictedPrefixAccessAlarm**
+> **Alarm 2: RestricedPrefixAccessAlarm**
 >
 > - Watches `RestrictedPrefixAccess`
 > - Same threshold and period
@@ -166,7 +166,7 @@ Screen recording of VS Code showing the folder structure and key files.
 > "Finally, the root module ties everything together. Look at the flow:
 >
 > 1. We instantiate `sns_security` and get back `sns_topic_arn`
-> 2. We instantiate `log_ingest_s3` and get back `log_group_name`
+> 2. We instantiate `log_metrics` and get back `log_group_name`
 > 3. We pass `log_group_name` to `security_metrics`
 > 4. We pass the metric names AND `sns_topic_arn` to `security_alarms`
 >
@@ -187,6 +187,7 @@ Terminal in VS Code, full screen.
 **Step 1: Initialize Terraform**
 
 ```bash
+cd code
 terraform init
 ```
 
@@ -201,6 +202,7 @@ terraform init
 **Step 2: Apply the Configuration**
 
 ```bash
+cd code
 terraform apply -var="security_alert_email=your-email@gmail.com" -auto-approve
 ```
 
@@ -222,22 +224,9 @@ terraform apply -var="security_alert_email=your-email@gmail.com" -auto-approve
 
 > "See how it's creating resources in parallel? The SNS topic, S3 buckets, and log group can all be created at the same time because they don't depend on each other. The CloudTrail waits for the bucket policy, and the alarms wait for the SNS topic. This is Terraform's dependency graph at work."
 
-**After completion:** Show the outputs:
-
-```
-Outputs:
-log_group_name = "/aws/cloudtrail/my-secure-bucket"
-monitored_bucket_name = "my-secure-bucket-afae410a"
-sns_topic_arn = "arn:aws:sns:us-east-1:123456789012:s3-security-alerts-topic"
-```
-
-**What to Say:**
-
-> "Great! Everything is created. Notice the bucket name has a random suffix—this ensures uniqueness. Let's save that bucket name for testing later."
+**After completion:** Show the outputs from the log_metrics module.
 
 ---
-
-## PART 5: SNS Subscription Confirmation (Critical Step - 1 minute)
 
 ## PART 5: SNS Subscription Confirmation (Critical Step - 1 minute)
 
@@ -352,7 +341,7 @@ fatal error: An error occurred (404) when calling the HeadObject operation: Not 
 
 **What to Say:**
 
-> "Let's check the log group. Go to CloudWatch > Log groups, and find `/aws/cloudtrail/my-secure-bucket`."
+> "Let's check the log group. Go to CloudWatch > Log groups, and find `/aws/cloudtrail/log-bucket`."
 
 **Show:** Click on the log group, then click on a log stream.
 
@@ -386,7 +375,7 @@ fatal error: An error occurred (404) when calling the HeadObject operation: Not 
 
 **What to Say:**
 
-> "Now the moment of truth. Let's check the alarms. Here they are: `DeniedRequestsAlarm` and `RestrictedPrefixAccessAlarm`."
+> "Now the moment of truth. Let's check the alarms. Here they are: `DeniedRequestsAlarm` and `RestricedPrefixAccessAlarm`."
 
 **Expected State:** They should be in **"In alarm"** (red) state.
 
@@ -412,10 +401,10 @@ fatal error: An error occurred (404) when calling the HeadObject operation: Not 
 
 **What to Say:**
 
-> "Subject: 'ALARM: RestrictedPrefixAccessAlarm in US East (N. Virginia)'. The body tells me:
+> "Subject: 'ALARM: RestricedPrefixAccessAlarm in US East (N. Virginia)'. The body tells me:
 >
 > - Alarm Name
-> - Alarm Description: 'This metric monitors access to restricted prefixes in S3'
+> - Alarm Description: 'This metric monitors restricted access prefixes in S3'
 > - The metric value that triggered it
 > - The timestamp
 > - A link to view the alarm in the console
@@ -477,10 +466,11 @@ Terminal.
 ### Command to Run
 
 ```bash
+cd code
 terraform destroy -var="security_alert_email=your-email@gmail.com" -auto-approve
 ```
 
-### What to Say
+### What to Say:
 
 > "Finally, cleanup is just one command. Terraform will delete all 15 resources in the reverse order of their dependencies. The buckets will be emptied automatically because we set `force_destroy = true`."
 
@@ -501,6 +491,9 @@ terraform destroy -var="security_alert_email=your-email@gmail.com" -auto-approve
 ## Quick Reference: Commands Cheat Sheet
 
 ```bash
+# Navigate to code directory
+cd code
+
 # Initialize
 terraform init
 
@@ -541,4 +534,3 @@ terraform destroy -var="security_alert_email=your@email.com" -auto-approve
 
 - Don't stop! Just say "Let me try that again" and redo the step. You can edit it out later.
 - Keep a backup terminal tab with the commands pre-typed.
-

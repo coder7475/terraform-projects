@@ -13,6 +13,23 @@ This project sets up a comprehensive monitoring stack for an S3 bucket using Clo
 5. **CloudWatch Alarms**: Triggers when these metrics exceed the threshold (1 event).
 6. **SNS**: Sends an email notification when an alarm triggers.
 
+## Project Structure
+
+```
+code/
+├── main.tf                 # Root module - orchestrates all sub-modules
+├── variables.tf            # Input variables (region, email, bucket name)
+├── outputs.tf              # Root module outputs
+├── provider.tf             # AWS provider configuration
+├── backend.tf              # Terraform backend configuration
+├── modules/
+│   ├── sns_security/       # SNS topic and email subscription
+│   ├── log_metrics/        # S3 buckets, CloudTrail, CloudWatch Logs
+│   ├── security_metrics/   # CloudWatch Metric Filters
+│   └── security_alarms/    # CloudWatch Alarms
+└── DEMO.md                 # Complete demo script
+```
+
 ## Prerequisites
 
 - Terraform installed.
@@ -23,6 +40,7 @@ This project sets up a comprehensive monitoring stack for an S3 bucket using Clo
 1. **Initialize Terraform:**
 
    ```bash
+   cd code
    terraform init
    ```
 
@@ -30,12 +48,14 @@ This project sets up a comprehensive monitoring stack for an S3 bucket using Clo
    Replace `your-email@example.com` with your actual email address.
 
    ```bash
+   cd code
    terraform plan -var="security_alert_email=your-email@example.com"
    ```
 
 3. **Apply the configuration:**
 
    ```bash
+   cd code
    terraform apply -var="security_alert_email=your-email@example.com"
    ```
 
@@ -77,6 +97,6 @@ This project sets up a comprehensive monitoring stack for an S3 bucket using Clo
 To destroy the resources:
 
 ```bash
+cd code
 terraform destroy -var="security_alert_email=your-email@example.com"
 ```
-

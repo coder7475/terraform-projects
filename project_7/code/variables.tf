@@ -7,11 +7,12 @@ variable "region" {
 variable "security_alert_email" {
   description = "Email address to receive security alerts"
   type        = string
+  default     = "rhfahadchy@gmail.com"
 }
 
 variable "monitored_bucket_name" {
   description = "Base name for the bucket to monitor"
   type        = string
-  default     = "my-secure-bucket"
+  default     = "log-bucket"
 }
 
